@@ -27,9 +27,9 @@ ORG 100H
 
 Start:
 
-    xor   bp, bp                   
-    push  0B800H                    
-    pop   es                       
+	xor   bp, bp						; BP is not always 0 at start
+	push  0B800H
+	pop   es							; ES := B800
 
 Game:
 
