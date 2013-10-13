@@ -43,28 +43,32 @@ Game:
 	mov  bh, 0AH						; but first,
 	call Paint							; paint the screen light green
 
-    and  di, 00111110b             
-    lea  bx, Aliens
+	and  di, 00111110b
+	lea  bx, Aliens
+
 DrawFormation:
-    mov  dx, 8                     
+	mov  dx, 8
+
 DrawRow:
-    lea  si, AlienShip             
-    ror  byte ptr [bx], 1          
-    sbb  ah, ah                    
-    and  ah, 13                    
-    mov  cl, 5                     
+	lea  si, AlienShip
+	ror  byte ptr [bx], 1
+	sbb  ah, ah
+	and  ah, 13
+	mov  cl, 5
+
 DrawAlien:
-    lodsb                          
-    stosw                          
-    loop DrawAlien
-    dec  dx                        
-    jnz  DrawRow
-	
-    add  di, 240                   
-    inc  bx                        
-    cmp  bl, low offset Aliens[4]  
-    jne  DrawFormation
-    pop  bx                         
+	lodsb								; read char
+	stosw								; write char and color
+	loop DrawAlien
+
+	dec  dx								; is the entire row of the formation drawn?
+	jnz  DrawRow
+
+	add  di, 240
+	inc  bx
+	cmp  bl, low offset Aliens[4]
+	jne  DrawFormation
+	pop  bx
 
     ; -------------------- DRAW PLAYER --------------------
 
