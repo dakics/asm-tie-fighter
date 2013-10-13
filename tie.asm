@@ -38,9 +38,11 @@ Game:
 
     ; ------------------- DRAW INVADERS -------------------
 
-    mov  di, bx                    
-    mov  bh, 0AH                   
-    call Paint                     
+	mov  di, bx							; start from BL/2 position
+
+	mov  bh, 0AH						; but first,
+	call Paint							; paint the screen light green
+
     and  di, 00111110b             
     lea  bx, Aliens
 DrawFormation:
