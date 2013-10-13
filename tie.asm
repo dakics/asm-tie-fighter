@@ -33,8 +33,8 @@ Start:
 
 Game:
 
-    push si                        
-    push bx                        
+	push si								; save bomb coordinate
+	push bx								; save invader and player coordinates
 
     ; ------------------- DRAW INVADERS -------------------
 
