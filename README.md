@@ -1,8 +1,9 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Tie Fighter
- Suicidal / Lucid
+ Srdjan Dakic
  January 1997
 
  WINNER in "256 bytes" compo at YALP '97  (Belgrade, YU)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
