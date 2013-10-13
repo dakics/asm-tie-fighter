@@ -29,19 +29,19 @@ Start:
 
 	xor   bp, bp						; BP is not always 0 at start
 	push  0B800H
-	pop   es							; ES := B800
+	pop   es						; ES := B800
 
 Game:
 
-	push si								; save bomb coordinate
-	push bx								; save invader and player coordinates
+	push si							; save bomb coordinate
+	push bx							; save invader and player coordinates
 
 	; ------------------- DRAW INVADERS -------------------
 
-	mov  di, bx							; start from BL/2 position
+	mov  di, bx						; start from BL/2 position
 
 	mov  bh, 0AH						; but first,
-	call Paint							; paint the screen light green
+	call Paint						; paint the screen light green
 
 	and  di, 00111110b
 	lea  bx, Aliens
@@ -57,11 +57,11 @@ DrawRow:
 	mov  cl, 5
 
 DrawAlien:
-	lodsb								; read char
-	stosw								; write char and color
+	lodsb							; read char
+	stosw							; write char and color
 	loop DrawAlien
 
-	dec  dx								; is the entire row of the formation drawn?
+	dec  dx							; is the entire row of the formation drawn?
 	jnz  DrawRow
 
 	add  di, 240
@@ -84,11 +84,11 @@ DrawPlayer:
 	
 	; ------------------- MOVE INVADERS -------------------
 
-	lodsb                           
-	add  bl, al                     
-	xor  bl, 00111111b              
+	lodsb
+	add  bl, al
+	xor  bl, 00111111b
 	jz   AlienMoveDone
-	
+
 ChangeMove:
 	neg byte ptr [si-1]
 
@@ -96,7 +96,7 @@ AlienMoveDone:
 
 	; ---------------- DRAW ROCKET AND BOMB ---------------
 
-	mov  di, bp                     
+	mov  di, bp
 	movsb
 	pop  si
 	mov  byte ptr es:[si], 'V'
@@ -105,68 +105,68 @@ AlienMoveDone:
 
 	mov  ch, 12H
 	mov  ax, bp
-	
-Zvuk:                               
+
+Zvuk:
 	ror  al, 1
-	out  61H, al                    
+	out  61H, al
 	loop Zvuk
 
 	; ---------------- MOVE PLAYER ROCKET -----------------
 
-    mov  dl, 160
-    mov  cl, 10
-	
-MovePlayerMissile:
-    div  dl                         
-    cmp  al, 8                      
-    jae  MovePMissile     
-	
-    push ax                         
-    shr  al, 1                      
-    cbw                             
-    mov  di, ax                     
-    pop  ax                         
-    sub  ah, bl
-    shr  ax, 8                      
-    div  cl                         
-    cmp  al, 7
-    ja   MovePMissile
-	
-    cbw                             
+	mov  dl, 160
+	mov  cl, 10
 
-    .386
-    btr  word ptr Aliens[di], ax    
-    .286                            
-    jc   DestroyMissile             
+MovePlayerMissile:
+	div  dl
+	cmp  al, 8
+	jae  MovePMissile
+
+	push ax
+	shr  al, 1
+	cbw
+	mov  di, ax
+	pop  ax
+	sub  ah, bl
+	shr  ax, 8
+	div  cl
+	cmp  al, 7
+	ja   MovePMissile
+
+	cbw
+
+	.386
+	btr  word ptr Aliens[di], ax
+	.286
+	jc   DestroyMissile
 
 MovePMissile:
-    sub  bp, dx                     
-    jns  MovePDone  
-	
-DestroyMissile:                     
-    xor  bp, bp
-	
+	sub  bp, dx
+	jns  MovePDone
+
+DestroyMissile:
+	xor  bp, bp
+
 MovePDone:
 
 	; ---------- READ KEYBOARD AND MOVE PLAYER ------------
-	
-    mov  ah, 2
-    int  16H
-    test al, 00001000b              
-    jz   Move
+
+	mov  ah, 2
+	int  16H
+	test al, 00001000b
+	jz   Move
 
 Kill:
-    mov  cx, 24*160 + 4             
-    add  cl, bh                     
-    mov  bp, cx                     
-	
+	mov  cx, 24*160 + 4
+	add  cl, bh
+	mov  bp, cx
+
 Move:
-    and  al, 00000011b              
-    jz   MoveDone     
-	
-    shl  al, 2                      
-    sub  al, 6                      
-    sub  bh, al                     
+	and  al, 00000011b
+	jz   MoveDone
+
+	shl  al, 2
+	sub  al, 6
+	sub  bh, al
 
 MoveDone:
 
@@ -174,41 +174,41 @@ MoveDone:
 
 MoveAlienBomb:
 
-    .386                            
-    bsf  eax, dword ptr Aliens      
-    .286                            
-    jnz  NotQuit                    
+	.386
+	bsf  eax, dword ptr Aliens
+	.286
+	jnz  NotQuit
 
-    mov  bh, 0AH                    
-    jmp  short Clear
+	mov  bh, 0AH
+	jmp  short Clear
 
 NotQuit:
-    or   si, si                     
-    jnz  MoveABomb            
+	or   si, si
+	jnz  MoveABomb
 
-    push ax                         
-    and  al, 00000111b              
-    mul  cl                         
-    add  al, bl                     
-    add  si, ax
-    pop  ax
-    shr  al, 2                      
-    mul  dl
-    add  si, ax
+	push ax
+	and  al, 00000111b
+	mul  cl
+	add  al, bl
+	add  si, ax
+	pop  ax
+	shr  al, 2
+	mul  dl
+	add  si, ax
 
 MoveABomb:
-    add  si, dx                     
-    cmp  si, 25*160                 
-    jb   CheckImpact
-    xor  si, si       
-	
+	add  si, dx
+	cmp  si, 25*160
+	jb   CheckImpact
+	xor  si, si
+
 CheckImpact:
-    mov  ax, 24*160 + 4             
-    add  al, bh                     
-    cmp  ax, si                     
-    .386                            
-    jne  Game                       
-    .286                            
+	mov  ax, 24*160 + 4
+	add  al, bh
+	cmp  ax, si
+	.386
+	jne  Game
+	.286
 
 GameOver:                           
 
@@ -217,7 +217,7 @@ GameOver:
 Paint:
 
 	mov  ax, 1003H						; WaitRetrace is undocumented
-	int  10H							; side effect in BIOS routine
+	int  10H						; side effect in BIOS routine
 
 	; -------------- PAINT THE SCREEN IN BH ---------------
 
@@ -239,14 +239,14 @@ Clear:
 ;                          16 BYTES OF DATA
 ; =====================================================================
 
-AlienShip:      DB '(-*-)'
-PlayerShip:     DB '(_ê_)'
-MoveInc:        DB 1
-PlayerMissile:  DB 'ê'
+AlienShip:      	DB '(-*-)'
+PlayerShip:     	DB '(_ê_)'
+MoveInc:        	DB 1
+PlayerMissile:  	DB 'ê'
 
-Aliens:			DB 01111110b			; formation at start
-				DB 11100111b
-				DB 11100111b
-				DB 01111110b
-
+Aliens:			DB 01111110b				; formation at start
+			DB 11100111b
+			DB 11100111b
+			DB 01111110b
+			
 END Start
