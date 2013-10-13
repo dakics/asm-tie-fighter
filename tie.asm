@@ -152,22 +152,25 @@ MovePDone:
 
 	mov  ah, 2
 	int  16H
-	test al, 00001000b
+	test al, 00001000b					; check if ALT key is pressed
 	jz   Move
 
 Kill:
-	mov  cx, 24*160 + 4
-	add  cl, bh
-	mov  bp, cx
+	mov  cx, 24*160 + 4					; fire new rocket and destroy old one,
+	add  cl, bh						; if still flying (just one is available)
+	mov  bp, cx						; fire from the middle of the ship
 
 Move:
-	and  al, 00000011b
-	jz   MoveDone
+	and  al, 00000011b					; check if SHIFT keys are pressed
+	jz   MoveDone						; if not, do nothing
 
-	shl  al, 2
-	sub  al, 6
-	sub  bh, al
-
+	shl  al, 2						; transform keyboard status bits to 
+	sub  al, 6						; +2 or -2 , which will be added to 
+	sub  bh, al						; position of the player ship
+	
+	; and  bh, 01111111b					; if left commented, player can go outside
+								; visible screen where it can not be hit
+								
 MoveDone:
 
 	; ----------------- MOVE ALIEN BOMB -------------------
