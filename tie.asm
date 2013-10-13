@@ -72,42 +72,44 @@ DrawAlien:
 
     ; -------------------- DRAW PLAYER --------------------
 
-    mov  ah, 0FH                    
-    mov  al, bh                     
-    mov  di, ax
-    mov  cl, 5
-DrawPlayer:
-    lodsb                           
-    stosw                           
-    loop DrawPlayer
+	mov  ah, 0FH
+	mov  al, bh
+	mov  di, ax
+	mov  cl, 5
 
+DrawPlayer:
+	lodsb
+	stosw
+	loop DrawPlayer
+	
     ; ------------------- MOVE INVADERS -------------------
 
-    lodsb                           
-    add  bl, al                     
-    xor  bl, 00111111b              
-    jz   AlienMoveDone
+	lodsb                           
+	add  bl, al                     
+	xor  bl, 00111111b              
+	jz   AlienMoveDone
 	
 ChangeMove:
-    neg byte ptr [si-1]    
-	
+	neg byte ptr [si-1]
+
 AlienMoveDone:
 
     ; ---------------- DRAW ROCKET AND BOMB ---------------
 
-    mov  di, bp                     
-    movsb
-    pop  si
-    mov  byte ptr es:[si], 'V'
+	mov  di, bp                     
+	movsb
+	pop  si
+	mov  byte ptr es:[si], 'V'
 
     ; ----------------- ROCKET SOUND FX  ------------------
 
-    mov  ch, 12H
-    mov  ax, bp
+	mov  ch, 12H
+	mov  ax, bp
+	
 Zvuk:                               
-    ror  al, 1
-    out  61H, al                    
-    loop Zvuk
+	ror  al, 1
+	out  61H, al                    
+	loop Zvuk
 
     ; ---------------- MOVE PLAYER ROCKET -----------------
 
@@ -210,29 +212,28 @@ CheckImpact:
 
 GameOver:                           
 
-    ; ------------------- MAKE PAUSE ----------------------
+	; ------------------- MAKE PAUSE ----------------------
 
 Paint:
 
-    mov  ax, 1003H                  
-    int  10H                        
-
+	mov  ax, 1003H						; WaitRetrace is undocumented
+	int  10H							; side effect in BIOS routine
 
     ; -------------- PAINT THE SCREEN IN BH ---------------
 
 Clear:
 
-    mov  ax, 0600H
-    xor  cx, cx
-    mov  dx, 184FH
-    int  10H
+	mov  ax, 0600H
+	xor  cx, cx
+	mov  dx, 184FH
+	int  10H
 
-    out  61H, al                    
+	out  61H, al						; turn off the sound
 
-    sub  bh, 0AH                    
-    jnz  GameOver                   
+	sub  bh, 0AH						; rotate color
+	jnz  GameOver						; if not last color, keep flashing
 
-    ret
+	ret
 
 ; =====================================================================
 ;                          16 BYTES OF DATA
@@ -243,11 +244,9 @@ PlayerShip:     DB '(_ê_)'
 MoveInc:        DB 1
 PlayerMissile:  DB 'ê'
 
-Aliens:         DB 01111110b
-                DB 11100111b
-                DB 11100111b
-                DB 01111110b
-
+Aliens:			DB 01111110b			; formation at start
+				DB 11100111b
+				DB 11100111b
+				DB 01111110b
 
 END Start
-
