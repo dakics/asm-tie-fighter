@@ -36,7 +36,7 @@ Game:
 	push si								; save bomb coordinate
 	push bx								; save invader and player coordinates
 
-    ; ------------------- DRAW INVADERS -------------------
+	; ------------------- DRAW INVADERS -------------------
 
 	mov  di, bx							; start from BL/2 position
 
@@ -70,7 +70,7 @@ DrawAlien:
 	jne  DrawFormation
 	pop  bx
 
-    ; -------------------- DRAW PLAYER --------------------
+	; -------------------- DRAW PLAYER --------------------
 
 	mov  ah, 0FH
 	mov  al, bh
@@ -82,7 +82,7 @@ DrawPlayer:
 	stosw
 	loop DrawPlayer
 	
-    ; ------------------- MOVE INVADERS -------------------
+	; ------------------- MOVE INVADERS -------------------
 
 	lodsb                           
 	add  bl, al                     
@@ -94,14 +94,14 @@ ChangeMove:
 
 AlienMoveDone:
 
-    ; ---------------- DRAW ROCKET AND BOMB ---------------
+	; ---------------- DRAW ROCKET AND BOMB ---------------
 
 	mov  di, bp                     
 	movsb
 	pop  si
 	mov  byte ptr es:[si], 'V'
 
-    ; ----------------- ROCKET SOUND FX  ------------------
+	; ----------------- ROCKET SOUND FX  ------------------
 
 	mov  ch, 12H
 	mov  ax, bp
@@ -111,7 +111,7 @@ Zvuk:
 	out  61H, al                    
 	loop Zvuk
 
-    ; ---------------- MOVE PLAYER ROCKET -----------------
+	; ---------------- MOVE PLAYER ROCKET -----------------
 
     mov  dl, 160
     mov  cl, 10
@@ -148,7 +148,7 @@ DestroyMissile:
 	
 MovePDone:
 
-    ; ---------- READ KEYBOARD AND MOVE PLAYER ------------
+	; ---------- READ KEYBOARD AND MOVE PLAYER ------------
 	
     mov  ah, 2
     int  16H
@@ -170,7 +170,7 @@ Move:
 
 MoveDone:
 
-    ; ----------------- MOVE ALIEN BOMB -------------------
+	; ----------------- MOVE ALIEN BOMB -------------------
 
 MoveAlienBomb:
 
@@ -219,7 +219,7 @@ Paint:
 	mov  ax, 1003H						; WaitRetrace is undocumented
 	int  10H							; side effect in BIOS routine
 
-    ; -------------- PAINT THE SCREEN IN BH ---------------
+	; -------------- PAINT THE SCREEN IN BH ---------------
 
 Clear:
 
