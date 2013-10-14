@@ -183,40 +183,40 @@ MoveDone:
 	jmp  short Clear
 
 NotQuit:
-	or   si, si
-	jnz  MoveAlienBomb
+	or   si, si						; if there is alien bomb already flying,
+	jnz  MoveAlienBomb					; then let it fly...
 
-	push ax
-	and  al, 00000111b
-	mul  cl
-	add  al, bl
+	push ax							; otherwise...
+	and  al, 00000111b					; figure out the alien order number
+	mul  cl							; in the formation and its position 
+	add  al, bl						; on the screen (horizontal)
 	add  si, ax
 	pop  ax
-	shr  al, 2
+	shr  al, 2						; place the bomb beneath alien
 	mul  dl
 	add  si, ax
 
 MoveAlienBomb:
-	add  si, dx
-	cmp  si, 25*160
+	add  si, dx						; bomb is falling...
+	cmp  si, 25*160						; is it out of the screen?
 	jb   CheckImpact
-	xor  si, si
+	xor  si, si						; YES, then destroy it
 
 CheckImpact:
-	mov  ax, 24*160 + 4
-	add  al, bh
-	cmp  ax, si
-	.386
-	jne  Game
-	.286
+	mov  ax, 24*160 + 4					; check if bomb hit the player ship cabin,
+	add  al, bh						; which is in the last row of the screen?
+	cmp  ax, si						; are coordinates of the cabin and the bomb 
+	.386							; the same? if not, then player survived 
+	jne  Game						; and bomb and the game go on...
+	.286							; (long 386 jump required)
 
-GameOver:                           
+GameOver:                           				; otherwise, it is game over for a player
 
 	; ------------------- MAKE PAUSE ----------------------
 
 Paint:
 	mov  ax, 1003H						; WaitRetrace is undocumented
-	int  10H						; side effect in BIOS routine
+	int  10H						; side effect in the BIOS routine
 
 	; -------------- PAINT THE SCREEN IN BH ---------------
 
