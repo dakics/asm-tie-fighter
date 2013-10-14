@@ -26,13 +26,11 @@
 ORG 100H
 
 Start:
-
 	xor   bp, bp						; BP is not always 0 at start
 	push  0B800H
 	pop   es						; ES := B800
 
 Game:
-
 	push si							; save bomb coordinate
 	push bx							; save invader and player coordinates
 
@@ -106,10 +104,10 @@ AlienMoveDone:
 	mov  ch, 12H
 	mov  ax, bp
 
-Zvuk:
+Sound:
 	ror  al, 1
 	out  61H, al
-	loop Zvuk
+	loop Sound
 
 	; ---------------- MOVE PLAYER ROCKET -----------------
 
@@ -170,24 +168,23 @@ Move:
 	
 	; and  bh, 01111111b					; if left commented, player can go outside
 								; visible screen where it can not be hit
+								; bug/feature to keep .COM size <= 256 bytes
 								
 MoveDone:
 
 	; ----------------- MOVE ALIEN BOMB -------------------
 
-MoveAlienBomb:
+	.386							; create new bomb
+	bsf  eax, dword ptr Aliens				; fired by AL-th alien
+	.286							; (first from the top/left)
+	jnz  NotQuit						; if no more aliens, mission accomplished!
 
-	.386
-	bsf  eax, dword ptr Aliens
-	.286
-	jnz  NotQuit
-
-	mov  bh, 0AH
+	mov  bh, 0AH						; prepare last screen clear
 	jmp  short Clear
 
 NotQuit:
 	or   si, si
-	jnz  MoveABomb
+	jnz  MoveAlienBomb
 
 	push ax
 	and  al, 00000111b
@@ -199,7 +196,7 @@ NotQuit:
 	mul  dl
 	add  si, ax
 
-MoveABomb:
+MoveAlienBomb:
 	add  si, dx
 	cmp  si, 25*160
 	jb   CheckImpact
@@ -218,14 +215,12 @@ GameOver:
 	; ------------------- MAKE PAUSE ----------------------
 
 Paint:
-
 	mov  ax, 1003H						; WaitRetrace is undocumented
 	int  10H						; side effect in BIOS routine
 
 	; -------------- PAINT THE SCREEN IN BH ---------------
 
 Clear:
-
 	mov  ax, 0600H
 	xor  cx, cx
 	mov  dx, 184FH
