@@ -115,7 +115,7 @@ Sound:
 	mov  cl, 10
 
 MovePlayerMissile:
-	div  dl
+	div  dl							; BP := Y * 160 + X
 	cmp  al, 8
 	jae  MovePMissile
 
@@ -129,20 +129,19 @@ MovePlayerMissile:
 	div  cl
 	cmp  al, 7
 	ja   MovePMissile
-
-	cbw
+	cbw							; AH := 0
 
 	.386
-	btr  word ptr Aliens[di], ax
-	.286
-	jc   DestroyMissile
+	btr  word ptr Aliens[di], ax				; hit the formation
+	.286							; if we have a kill, destroy missile
+	jc   DestroyMissile					; otherwise, missile keeps flying
 
 MovePMissile:
-	sub  bp, dx
-	jns  MovePDone
+	sub  bp, dx						; fly missile fly!	
+	jns  MovePDone						; if coordinate < 0 this means the missile...
 
 DestroyMissile:
-	xor  bp, bp
+	xor  bp, bp						; ...hit the top, so destroy it
 
 MovePDone:
 
