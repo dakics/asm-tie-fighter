@@ -130,17 +130,19 @@ MovePlayerMissile:
 								; notice this feature
 								
 	div  dl							; BP := Y * 160 + X
-	cmp  al, 8
-	jae  MovePMissile
+	
+	cmp  al, 8						; if you remove these two instructions then 
+	jae  MovePMissile					; invaders have shields and you need to destroy
+								; undefined memory space above alien formation
 
-	push ax
-	shr  al, 1
-	cbw
-	mov  di, ax
-	pop  ax
-	sub  ah, bl
-	shr  ax, 8
-	div  cl
+	push ax							; Y := BP DIV 160, X := BP MOD 160
+	shr  al, 1						; position of the alien formation is Y DIV 2
+	cbw							; AH := 0
+	mov  di, ax						; DI := position of the alien formation
+	pop  ax							
+	sub  ah, bl						; possibly hit invader has position in formation
+	shr  ax, 8						; equal to ((X - AlienX) DIV 2) DIV 5
+	div  cl							; AL := position of the invader
 	cmp  al, 7
 	ja   MovePMissile
 	cbw							; AH := 0
