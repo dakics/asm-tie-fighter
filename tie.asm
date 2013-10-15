@@ -41,60 +41,65 @@ Game:
 	mov  bh, 0AH						; but first,
 	call Paint						; paint the screen light green
 
-	and  di, 00111110b
-	lea  bx, Aliens
+	and  di, 00111110b					; clear bit 0 (draw invaders every
+	lea  bx, Aliens						; on new position every other frame)
 
 DrawFormation:
-	mov  dx, 8
+	mov  dx, 8						; there are 8 positions in one formation row
 
 DrawRow:
-	lea  si, AlienShip
-	ror  byte ptr [bx], 1
-	sbb  ah, ah
-	and  ah, 13
-	mov  cl, 5
+	lea  si, AlienShip					; this is the tie-fighter data
+	ror  byte ptr [bx], 1					; test if invader is still in formation
+	sbb  ah, ah						; remove it or display it
+	and  ah, 13						; if displayed then the colour is 13
+	mov  cl, 5						; invader ship is 5 chars long
 
 DrawAlien:
 	lodsb							; read char
-	stosw							; write char and color
+	stosw							; write char and colour
 	loop DrawAlien
 
 	dec  dx							; is the entire row of the formation drawn?
 	jnz  DrawRow
 
-	add  di, 240
-	inc  bx
-	cmp  bl, low offset Aliens[4]
+	add  di, 240						; skip one screen row
+	inc  bx							; process next invader row,
+	cmp  bl, low offset Aliens[4]				; and there are 4 of them rows
 	jne  DrawFormation
-	pop  bx
+	pop  bx							; restore player and invader coordinates
 
 	; -------------------- DRAW PLAYER --------------------
 
-	mov  ah, 0FH
-	mov  al, bh
+	mov  ah, 0FH						; draw player in the last row
+	mov  al, bh						; in white colour (0F)
 	mov  di, ax
 	mov  cl, 5
 
 DrawPlayer:
-	lodsb
-	stosw
+	lodsb							; read char
+	stosw							; write both char and attribute
 	loop DrawPlayer
 	
 	; ------------------- MOVE INVADERS -------------------
 
-	lodsb
-	add  bl, al
-	xor  bl, 00111111b
-	jz   AlienMoveDone
+	lodsb							; read movement (number 1 after player definition)
+	add  bl, al						; BL will become odd number because
+								; +1 or -1 is added to even number
+	
+	xor  bl, 00111111b					; because BL is odd number, this will
+								; reset bit 0, so it will become even again
+								; this helps calculating X screen coordinate
+	
+	jz   AlienMoveDone					
 
 ChangeMove:
-	neg byte ptr [si-1]
+	neg byte ptr [si-1]					; change movement direction
 
 AlienMoveDone:
 
 	; ---------------- DRAW ROCKET AND BOMB ---------------
 
-	mov  di, bp
+	mov  di, bp						; rocket is right after movement
 	movsb
 	pop  si
 	mov  byte ptr es:[si], 'V'
@@ -106,7 +111,7 @@ AlienMoveDone:
 
 Sound:
 	ror  al, 1
-	out  61H, al
+	out  61H, al						; make some noise
 	loop Sound
 
 	; ---------------- MOVE PLAYER ROCKET -----------------
@@ -115,6 +120,15 @@ Sound:
 	mov  cl, 10
 
 MovePlayerMissile:
+
+	; or   ax, ax                   			; control if there is rocket at all
+	; jz   MovePDone                			; if you remove control (to keep under 256 bytes)
+								; then the top/left invader will be killed at 
+								; start and whenever there is no player rocket
+								
+								; formation is cleverly chosen so you don't 
+								; notice this feature
+								
 	div  dl							; BP := Y * 160 + X
 	cmp  al, 8
 	jae  MovePMissile
