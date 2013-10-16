@@ -30,6 +30,22 @@ Nerd stuff
   - Game uses undocumented "wait retrace" in one of the [BIOS routines][ax1003] for accurate timing (as much as possible) and to prevent screen tearing.
 
   - If you slow CPU too much, you will easily figure out how zig-zag alien movement is implemented.
+  
+  - Sound FX is just random garbage (missile Y position) sent to the speaker port.
+  
+  
+Bug (feature) list
+------------------
+
+  - In the upper-left corner missile and bomb appears (when x/y coords are 0/0).
+
+  - Player can go out of the screen and shoot rockets from there, aka "cheat mode".
+  
+  - Every time player shoots, "invisible alien ship" drops bomb, due to undefined SI value.
+  
+  - Upper-left alien is getting killed whenever there is no player missile, but due to shape of the formation this is not obvious.
+  
+  - Bomb does not appearing always exactly below alien.  
 
 
 Screenshots
@@ -42,8 +58,8 @@ Screenshots
 ![alt tag](https://raw.github.com/dakics/asm-tie-fighter/master/tie-3.png)
 
 
-^ GAME OVER
------------
+^^^ BOOM. GAME OVER
+-------------------
 
 [dosbox]: http://www.dosbox.com
 [ax1003]: http://www.ousob.com/ng/asm/ng74cc7.php
