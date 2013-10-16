@@ -1,10 +1,10 @@
 
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Tie Fighter
- Srdjan Dakic
- January 1997
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Story
+-----
+Aliens are attacking.
+Kill 'em all.
+Save Earth.
 
 
 > [POUET users:][pouet]
@@ -14,13 +14,6 @@
 > - _"playable! beep beep!"_
 
 > - _"cool game. playable with dosbox when you lower cpu cycles."_
-
-
-Story
------
-Aliens are attacking.
-Kill 'em all.
-Save Earth.
 
 
 Instructions
