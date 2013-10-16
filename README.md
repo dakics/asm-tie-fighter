@@ -21,6 +21,8 @@ Tweak CPU speed with **CTRL-11** and **CTRL-12** until it is playable.
 
 If you have sound on, you will be blasted by roar of the player rocket launch. There is even a brief explosion if you get killed!
 
+Watch out for invisible alien ships! Search for an air-raid shelter if action gets too wild.
+
 ![alt tag](https://raw.github.com/dakics/asm-tie-fighter/master/tie-0.png)
 
 
@@ -37,15 +39,15 @@ Nerd stuff
 Bug (feature) list
 ------------------
 
-  - In the upper-left corner missile and bomb appears (when x/y coords are 0/0).
+  - In the upper-left corner missile and bomb appears (whenever there is no player missile), aka "the minefield".
 
-  - Player can go out of the screen and shoot rockets from there, aka "cheat mode".
+  - Player can go out of the screen and shoot from there, so there is even a "cheat mode" !
   
-  - Every time player shoots, "invisible alien ship" drops bomb, due to undefined SI value.
+  - Every time player shoots, "invisible alien ship" drops bomb (undefined SI value).
   
-  - Upper-left alien is getting killed whenever there is no player missile, but due to shape of the formation this is not obvious.
+  - Upper-left alien is getting killed in "the minefield", due to shape of the formation this is not obvious.
   
-  - Bomb does not appearing always exactly below alien.  
+  - Bombs don't appear always exactly below alien.  
 
 
 Screenshots
