@@ -42,5 +42,8 @@ Screenshots
 ![alt tag](https://raw.github.com/dakics/asm-tie-fighter/master/tie-3.png)
 
 
+^ GAME OVER
+-----------
+
 [dosbox]: http://www.dosbox.com
 [ax1003]: http://www.ousob.com/ng/asm/ng74cc7.php
