@@ -14,12 +14,12 @@ Instructions
 ------------
 As with any other MS-DOS application, on modern OS you need to run it inside [DOSBox].
 
-To make it playable, you probably have to  slow down the CPU. Tweak with **CTRL-11** and **CTRL-12** until it is OK. If you slow it down too much, you will figure out how zig-zag alien movement is implemented.
+Tweak CPU speed with **CTRL-11** and **CTRL-12** until it is playable.
 
   - **LEFT / RIGHT SHIFT** - move player ship
   - **LEFT ALT** - fire rocket
 
-If you have sound on, you will be blasted by roar of the player rocket launch. There is even brief explosion if you get killed!
+If you have sound on, you will be blasted by roar of the player rocket launch. There is even a brief explosion if you get killed!
 
 ![alt tag](https://raw.github.com/dakics/asm-tie-fighter/master/tie-0.png)
 
@@ -27,7 +27,9 @@ If you have sound on, you will be blasted by roar of the player rocket launch. T
 Nerd stuff
 ----------
 
-Game uses undocumented "wait retrace" in one of the [BIOS routines][ax1003] for accurate timing (as much as possible) and to prevent screen tearing.
+  - Game uses undocumented "wait retrace" in one of the [BIOS routines][ax1003] for accurate timing (as much as possible) and to prevent screen tearing.
+
+  - If you slow CPU too much, you will easily figure out how zig-zag alien movement is implemented.
 
 
 Screenshots
