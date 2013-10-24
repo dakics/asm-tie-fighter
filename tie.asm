@@ -26,7 +26,7 @@
 ORG 100H
 
 Start:
-	xor   bp, bp					; BP is not always 0 at start
+	xor   bp, bp						; BP is not always 0 at start
 	push  0B800H
 	pop   es						; ES := B800
 
