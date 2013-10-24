@@ -26,7 +26,7 @@
 ORG 100H
 
 Start:
-	xor   bp, bp						; BP is not always 0 at start
+	xor   bp, bp					; BP is not always 0 at start
 	push  0B800H
 	pop   es						; ES := B800
 
@@ -121,28 +121,28 @@ Sound:
 
 MovePlayerMissile:
 
-	; or   ax, ax                   			; control if there is rocket at all
-	; jz   MovePDone                			; if you remove control (to keep under 256 bytes)
+	; or   ax, ax                   		; control if there is rocket at all
+	; jz   MovePDone                		; if you remove control (to keep under 256 bytes)
 								; then the top/left invader will be killed at 
 								; start and whenever there is no player rocket
 								
 								; formation is cleverly chosen so you don't 
 								; notice this feature
 								
-	div  dl							; BP := Y * 160 + X
+	div  dl						; BP := Y * 160 + X
 	
 	cmp  al, 8						; if you remove these two instructions then 
 	jae  MovePMissile					; invaders have shields and you need to destroy
 								; undefined memory space above alien formation
 
-	push ax							; Y := BP DIV 160, X := BP MOD 160
+	push ax						; Y := BP DIV 160, X := BP MOD 160
 	shr  al, 1						; position of the alien formation is Y DIV 2
 	cbw							; AH := 0
 	mov  di, ax						; DI := position of the alien formation
 	pop  ax							
 	sub  ah, bl						; possibly hit invader has position in formation
 	shr  ax, 8						; equal to ((X - AlienX) DIV 2) DIV 5
-	div  cl							; AL := position of the invader
+	div  cl						; AL := position of the invader
 	cmp  al, 7
 	ja   MovePMissile
 	cbw							; AH := 0
