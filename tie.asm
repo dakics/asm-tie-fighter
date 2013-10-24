@@ -38,7 +38,7 @@ Game:
 
 	mov  di, bx						; start from BL/2 position
 
-	mov  bh, 0AH						; but first,
+	mov  bh, 0AH						; but first
 	call Paint						; paint the screen light green
 
 	and  di, 00111110b					; clear bit 0 (draw invaders every
